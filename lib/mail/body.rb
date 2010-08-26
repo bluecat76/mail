@@ -46,7 +46,6 @@ module Mail
         end
       end
       @encoding = (only_us_ascii? ? '7bit' : '8bit')
-      set_charset
     end
     
     # Matches this body with another body.  Also matches the decoded value of this
@@ -172,7 +171,7 @@ module Mail
       if !Encodings.defined?(encoding)
         raise UnknownEncodingType, "Don't know how to decode #{encoding}, please call #encoded and decode it yourself."
       else
-        Encodings.get_encoding(encoding).decode(raw_source)
+        Encodings.get_encoding(encoding).decode(raw_source).force_encoding(@charset || "US-ASCII")
       end
     end
     
@@ -278,10 +277,6 @@ module Mail
     
     def end_boundary
       "\r\n\r\n--#{boundary}--\r\n"
-    end
-    
-    def set_charset
-      only_us_ascii? ? @charset = 'US-ASCII' : @charset = nil
     end
   end
 end

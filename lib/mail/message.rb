@@ -1097,6 +1097,9 @@ module Mail
       else
         @body = Mail::Body.new(value)
       end
+      
+      @body.charset = @header.charset if @header.charset
+            
       add_encoding_to_body
     end
 
